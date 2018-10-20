@@ -21,7 +21,9 @@ public class Follow : MonoBehaviour {
 		if (freezeZ) {
 			Vector3 pos = targetTrans.position;
 			pos.z = _trans.position.z;
+            pos.y += 2;
 			_trans.position = pos;
+            
 		}
 		else {
 			_trans.position = targetTrans.position;
