@@ -89,19 +89,7 @@ public class LightMovement : MonoBehaviour {
         if (collision.gameObject.tag == "Enemy")
         {
             print("Collision with Enemy");
-            collision.gameObject.GetComponentInChildren<Light>().intensity = 1;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        //Maybe Implement
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "PlayerTag")
-        {
+            collision.gameObject.GetComponentInChildren<Light>().intensity = 3;
         }
     }
 }
