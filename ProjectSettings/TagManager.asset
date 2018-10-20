@@ -9,6 +9,10 @@ TagManager:
   - LightTile
   - ExitTile
   - Lamp
+  - BluenoLight
+  - PlayerTag
+  - Enemy
+  - Building
   layers:
   - Default
   - TransparentFX
