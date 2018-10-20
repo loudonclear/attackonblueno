@@ -9,6 +9,10 @@ TagManager:
   - LightTile
   - ExitTile
   - Lamp
+  - Building
+  - BluenoLight
+  - PlayerTag
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -57,4 +61,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 1052706531
+    locked: 0
+  - name: Foreground
+    uniqueID: 3587348591
     locked: 0

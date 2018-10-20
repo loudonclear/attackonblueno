@@ -2,43 +2,96 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
+[RequireComponent(typeof(CharacterController))]
+public class PlayerController : MonoBehaviour
+{
 
-    public float speed = 5;
-    public float jumpVelocity = 5;
-    public float fallMultiplier = 2.5f;
-    public float lowJumpmultiplier = 2f;
+    public float jumpHeight = 4;
+    public float timeToJumpApex = .4f;
+    public float accelerationTimeAirborne = .2f;
+    public float accelerationTimeGrounded = .1f;
+    public float moveSpeed = 6;
+    public float crouchControllerHeight;
+    public Vector3 crouchControllerCenter;
 
-    private Rigidbody rb;
-    private SpriteRenderer spr;
+    private float defaultControllerHeight;
+    private Vector3 defaultControllerCenter;
 
-	void Awake () {
-        rb = GetComponent<Rigidbody>();
-        spr = GetComponent<SpriteRenderer>();
-	}
+    private float gravity;
+    private float jumpVelocity;
+    private Vector3 velocity;
+    private float velocityXSmoothing;
+
+    private CharacterController controller;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        defaultControllerHeight = controller.height;
+        defaultControllerCenter = controller.center;
+
+        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+    }
 
     void Update()
     {
-        float jmp = rb.velocity.y;
-        float hrz = Input.GetAxis("Horizontal");
-
-        if (Input.GetButtonDown("Jump") && (Physics.Raycast(transform.position + new Vector3(spr.bounds.extents.x, 0, 0), Vector3.down, 2*spr.bounds.extents.y + 0.5f) || 
-                                            Physics.Raycast(transform.position - new Vector3(spr.bounds.extents.x, 0, 0), Vector3.down, 2*spr.bounds.extents.y + 0.5f)))
+        if (((controller.collisionFlags & CollisionFlags.Above) != 0 && velocity.y > 0) || (controller.collisionFlags & CollisionFlags.Below) != 0)
         {
-            jmp += jumpVelocity;
-        } 
-
-        rb.velocity = new Vector3(speed * hrz, jmp, 0);
-
-        if (rb.velocity.y < 0)
-        {
-            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            velocity.y = 0;
         }
-        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+
+        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+        if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
         {
-            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpmultiplier - 1) * Time.deltaTime;
+            velocity.y = jumpVelocity;
         }
+        
+
+        float targetVelocityX = input.x * moveSpeed;
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.isGrounded) ? accelerationTimeGrounded : accelerationTimeAirborne);
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+
+        if (Mathf.Abs(input.x) > 0.01)
+        {
+            if (controller.isGrounded)
+            {
+                animator.speed = 1;
+            } else
+            {
+                animator.speed = 0;
+            }
+
+            if (input.x < 0)
+            {
+                spriteRenderer.flipX = true;
+            } else
+            {
+                spriteRenderer.flipX = false;
+            }
+        } else
+        {
+            animator.speed = 0;
+        }
+
+        //if (Input.GetKey(KeyCode.LeftControl))
+        //{
+            //animator.SetTrigger("crouch");
+            //controller.height = crouchControllerHeight;
+            //controller.center = crouchControllerCenter;
+        //} else
+        //{
+            //animator.SetTrigger("walk");
+           // controller.height = defaultControllerHeight;
+           // controller.center = defaultControllerCenter;
+      //  }
     }
-	
-	
+
 }
