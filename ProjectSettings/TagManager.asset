@@ -9,10 +9,17 @@ TagManager:
   - LightTile
   - ExitTile
   - Lamp
+<<<<<<< HEAD
   - Building
   - BluenoLight
   - PlayerTag
   - Enemy
+=======
+  - BluenoLight
+  - PlayerTag
+  - Enemy
+  - Building
+>>>>>>> bb67ab2dc068b3803cffaed203fa6e89f57ea1e1
   layers:
   - Default
   - TransparentFX
