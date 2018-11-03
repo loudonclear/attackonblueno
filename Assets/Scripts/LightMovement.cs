@@ -70,9 +70,16 @@ public class LightMovement : MonoBehaviour {
 
     public void MoveLightForward()
     {
+        float whileTimer = 0f;
+
         while(transform.position.x + 4 < PlayerGameObject.transform.position.x)
         {
             transform.Translate(Vector2.right * Time.deltaTime);
+            while (whileTimer < 2*Time.deltaTime)
+            {
+                whileTimer += Time.deltaTime;
+            }
+            whileTimer = 0;
         }
         
         readyToMoveRegularly = true;
@@ -84,6 +91,11 @@ public class LightMovement : MonoBehaviour {
         {
             print("Collision " + tempCollisionCounter);
             tempCollisionCounter++;
+            PlayerGameObject.GetComponent<PlayerDeath>().RemoveLife();
+            if (PlayerGameObject.GetComponent<PlayerDeath>().GetLifeCount() <= 0)
+            {
+                PlayerGameObject.GetComponent<PlayerDeath>().PlayerDied();
+            }
         }
 
         if (collision.gameObject.tag == "Enemy")

@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour {
     private bool enemyActivated = false;
     public float enemySpeed = 0f;
     private float timer = 0f;
+    private bool enemyDirection = false;
 
 	// Use this for initialization
 	void Start () {
@@ -32,6 +33,24 @@ public class Enemy : MonoBehaviour {
                 enemyActivated = false;
             }
         }
+
+        if(enemyDirection)
+        {
+            transform.Translate(Vector2.left * Time.deltaTime * enemySpeed / 2);
+        }
+        else
+        {
+            transform.Translate(Vector2.right * Time.deltaTime * enemySpeed / 2);
+        }
+
+        timer += Time.deltaTime;
+
+        if(timer >= 3)
+        {
+            enemyDirection = !enemyDirection;
+            timer = 0;
+        }
+
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -39,6 +58,11 @@ public class Enemy : MonoBehaviour {
         if(collision.gameObject == PlayerGameObject && enemyActivated)
         {
             print("Enemy Colliding with Player");
+            PlayerGameObject.GetComponent<PlayerDeath>().RemoveLife();
+            if (PlayerGameObject.GetComponent<PlayerDeath>().GetLifeCount() <= 0)
+            {
+                PlayerGameObject.GetComponent<PlayerDeath>().PlayerDied();
+            } 
         }
     }
 

@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - BluenoLight
+  - PlayerTag
+  - Building
+  - Enemy
+  - CanvasTag
+  - RestartButtonTag
+  - MainMenuButtonTag
   layers:
   - Default
   - TransparentFX
