@@ -26,5 +26,6 @@ public class ChangeColorOnLOSEvent : MonoBehaviour {
 
 	private void OnLit () {
 		_renderer.color = litColor;
+        GameObject.FindGameObjectWithTag("PlayerTag").GetComponent<PlayerDeath>().RemoveLife();
 	}
 }
