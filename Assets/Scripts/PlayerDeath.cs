@@ -12,16 +12,12 @@ public class PlayerDeath : MonoBehaviour {
     private GameObject canvasGameObject;
     private GameObject RestartButton;
     private GameObject MainMenuButton;
-    private Text GameOverText;
-    private Text LivesText;
 
     void Start () {
         spriteRenderer = GetComponent<SpriteRenderer>();
         canvas = FindObjectOfType<Canvas>();
         canvasGameObject = GameObject.FindGameObjectWithTag("CanvasTag");
-
-        GameOverText = canvasGameObject.GetComponentsInChildren<Text>()[0];
-        GameOverText.enabled = false;
+        canvasGameObject.GetComponentInChildren<Text>().enabled = false;
 
         RestartButton = GameObject.FindGameObjectWithTag("RestartButtonTag");
         RestartButton.GetComponent<Image>().enabled = false;
@@ -34,8 +30,6 @@ public class PlayerDeath : MonoBehaviour {
         MainMenuButton.GetComponentInChildren<Text>().enabled = false;
 
         PlayerLives = 3;
-        LivesText = canvasGameObject.GetComponentsInChildren<Text>()[3];
-        LivesText.text = "Lives: " + PlayerLives;
     }
 	
 	// Update is called once per frame
@@ -46,7 +40,7 @@ public class PlayerDeath : MonoBehaviour {
     public void PlayerDied()
     {
         this.gameObject.SetActive(false);
-        GameOverText.enabled = true;
+        canvasGameObject.GetComponentInChildren<Text>().enabled = true;
         RestartButton.GetComponent<Image>().enabled = true;
         RestartButton.GetComponent<Button>().enabled = true;
         RestartButton.GetComponentInChildren<Text>().enabled = true;
@@ -58,11 +52,7 @@ public class PlayerDeath : MonoBehaviour {
     public void RemoveLife()
     {
         PlayerLives--;
-        LivesText.text = "Lives: " + PlayerLives;
-        if (PlayerLives <= 0)
-        {
-            this.PlayerDied();
-        }
+        print("Lives Left: " + PlayerLives);
     }
 
     public int GetLifeCount()
